@@ -180,7 +180,7 @@ export default async function load(
       throw new Error(
         `Unable to process "<Icon pack="${pack}" name="${name}" />" because an SVG string was not returned!
 
-Recieved the following content:
+Received the following content:
 ${contents}`
       );
     }
@@ -200,7 +200,7 @@ ${contents}`
         throw new Error(
           `Unable to process "${filepath}" because it is not an SVG!
 
-Recieved the following content:
+Received the following content:
 ${contents}`
         );
       }

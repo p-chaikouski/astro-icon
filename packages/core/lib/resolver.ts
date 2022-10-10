@@ -1,36 +1,44 @@
-const baseURL = "https://api.astroicon.dev/v1/";
-const requests = new Map();
-const fetchCache = new Map();
+import { promises as fs} from 'fs';
+import { locate } from '@iconify/json';
+import { getIconData, iconToSVG } from '@iconify/utils'
 
-// Default resolver fetches icons from `api.astroicon.dev`
-export default async function get(pack: string, name: string) {
-  const url = new URL(`./${pack}/${name}`, baseURL).toString();
-  // Handle in-flight requests
-  if (requests.has(url)) {
-    return await requests.get(url);
+const packAliases = new Map([
+  ["logo", "fa-brands"],
+  ["radix", "radix-icons"],
+]);
+
+export default async function get(pack: string, name: string) { 
+  if (packAliases.has(pack)) {
+    pack = packAliases.get(pack)!;
   }
-  if (fetchCache.has(url)) {
-    return fetchCache.get(url);
+
+  // Locate icons
+  const filename = locate(pack);
+
+  // Load icon set
+  const icons = JSON.parse(await fs.readFile(filename, 'utf8'));
+
+  const iconData = getIconData(icons, name)
+  if (!iconData) {
+    throw new Error(`"${name}" does not exist`)
   }
 
-  let request = async () => {
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(await res.text());
-    }
-    const contentType = res.headers.get("Content-Type");
-    if (!contentType.includes("svg")) {
-      throw new Error(`[astro-icon] Unable to load "${name}" because it did not resolve to an SVG!
+  const renderData = iconToSVG(iconData)
 
-Recieved the following "Content-Type":
-${contentType}`);
-    }
-    const svg = await res.text();
-    fetchCache.set(url, svg);
-    requests.delete(url);
-    return svg;
-  };
-  let promise = request();
-  requests.set(url, promise);
-  return await promise;
+  const svgAttributes: Record<string, string> = {
+    'xmlns': 'http://www.w3.org/2000/svg',
+    'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+    ...renderData.attributes,
+ };
+ const svgAttributesStr = Object.keys(svgAttributes)
+    .map(
+        (attr) =>
+            // No need to check attributes for special characters, such as quotes,
+            // they cannot contain anything that needs escaping.
+            `${attr}="${svgAttributes[attr as keyof typeof svgAttributes]}"`
+    )
+    .join(' ');
+ 
+ // Generate SVG
+ return `<svg ${svgAttributesStr}>${renderData.body}</svg>`;
 }
