@@ -10,11 +10,11 @@
     "preview": "astro preview"
   },
   "devDependencies": {
+    "@astrojs/vercel": "^0.0.0-include-files-20221014142503",
     "astro": "^1.5.0",
     "astro-icon": "https://gitpkg.now.sh/stramel/astro-icon/packages/core?main"
   },
   "dependencies": {
-    "@astrojs/vercel": "^2.2.0",
     "@iconify/json": "^2.0.0",
     "heroicons": "^1.0.5"
   }
