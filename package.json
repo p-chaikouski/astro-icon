@@ -1,35 +1,45 @@
 {
-  "name": "root",
-  "private": true,
-  "version": "0.0.0",
+  "name": "astro-icon",
+  "version": "0.7.4",
   "type": "module",
-  "scripts": {
-    "dev": "yarn workspace demo run dev",
-    "lint": "prettier \"**/*.{js,ts,md,json}\""
+  "exports": {
+    ".": "./index.ts",
+    "./pack": "./lib/createIconPack.ts"
   },
-  "workspaces": [
-    "packages/*",
-    "demo"
+  "files": [
+    "lib",
+    "index.ts"
+  ],
+  "author": {
+    "name": "Nate Moore",
+    "email": "nate@natemoo.re",
+    "url": "https://twitter.com/n_moore"
+  },
+  "keywords": [
+    "astro",
+    "astro-component",
+    "image",
+    "images",
+    "icon",
+    "icons",
+    "iconify",
+    "optimization"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natemoo-re/astro-icon.git"
+    "url": "git+https://github.com/p-chaikouski/astro-icon.git",
   },
-  "keywords": [],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/natemoo-re/astro-icon/issues"
+    "url": "https://github.com/p-chaikouski/astro-icon/issues"
   },
-  "homepage": "https://github.com/natemoo-re/astro-icon#readme",
-  "volta": {
-    "node": "16.13.0",
-    "yarn": "1.22.17"
-  },
+  "homepage": "https://github.com/p-chaikouski/astro-icon#readme",
   "dependencies": {
-    "@changesets/cli": "^2.18.1",
-    "@changesets/changelog-github": "^0.4.2"
+    "@iconify/utils": "^2.0.1",
+    "resolve-pkg": "^2.0.0",
+    "svgo": "^2.8.0"
   },
-  "devDependencies": {
-    "prettier": "^2.5.0"
+  "peerDependencies": {
+    "@iconify/json": "^2.0.0"
   }
 }
